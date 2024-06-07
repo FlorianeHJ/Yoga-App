@@ -55,12 +55,21 @@ const utils = {
   deleItem: function () {
     document.querySelectorAll(".deleteBtn").forEach((btn) => {
       btn.addEventListener("click", (e) => {
-        let newArr = exerciceArray.filter((exo) => {
-          exo.pic != e.target.dataset.pic;
+        let newArr = [];
+        exerciceArray.map((exo) => {
+          if (exo.pic != e.target.dataset.pic) {
+            newArr.push(exo);
+          }
         });
+        exerciceArray = newArr;
+        page.lobby();
       });
     });
   },
+
+  reboot: funciton () {
+    
+  }
 };
 
 const page = {
@@ -92,6 +101,9 @@ const page = {
     utils.handleEventMinutes();
     utils.handleEventArrow();
     utils.deleItem();
+    reboot.addEventListener("click", () => {
+      utils.reboot;
+    });
   },
 
   routine: function () {
