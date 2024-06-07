@@ -1,5 +1,5 @@
 const main = document.querySelector("main");
-let exerciceArray = [
+const basicArray = [
   { pic: 0, min: 1 },
   { pic: 1, min: 1 },
   { pic: 2, min: 1 },
@@ -11,6 +11,16 @@ let exerciceArray = [
   { pic: 8, min: 1 },
   { pic: 9, min: 1 },
 ];
+let exerciceArray = [];
+
+// Get stored exercices array
+(() => {
+  if (localStorage.exercices) {
+    exerciceArray = localStorage.exercices;
+  } else {
+    exerciceArray = basicArray;
+  }
+})();
 
 class Exercice {}
 
@@ -25,8 +35,8 @@ const utils = {
     document.querySelectorAll('input[type="number"]').forEach((input) => {
       input.addEventListener("input", (e) => {
         exerciceArray.map((exo) => {
-          if (exo.pic == parseInt(e.target.id)) {
-            exo.min = e.target.value;
+          if (exo.min == parseInt(e.target.value)) {
+            this.store();
           }
         });
       });
@@ -44,6 +54,7 @@ const utils = {
               exerciceArray[position],
             ];
             page.lobby();
+            this.store();
           } else {
             position++;
           }
@@ -63,13 +74,20 @@ const utils = {
         });
         exerciceArray = newArr;
         page.lobby();
+        this.store();
       });
     });
   },
 
-  reboot: funciton () {
-    
-  }
+  reboot: function () {
+    exerciceArray = basicArray;
+    page.lobby();
+    this.store();
+  },
+
+  store: function () {
+    localStorage.exercices = exerciceArray;
+  },
 };
 
 const page = {
