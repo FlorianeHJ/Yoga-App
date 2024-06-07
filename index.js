@@ -20,13 +20,55 @@ const utils = {
     main.innerHTML = content;
     document.querySelector(".btn-container").innerHTML = btn;
   },
+
+  handleEventMinutes: function () {
+    document.querySelectorAll('input[type="number"]').forEach((input) => {
+      input.addEventListener("input", (e) => {
+        exerciceArray.map((exo) => {
+          if (exo.pic == parseInt(e.target.id)) {
+            exo.min = e.target.value;
+          }
+        });
+      });
+    });
+  },
+
+  handleEventArrow: function () {
+    document.querySelectorAll(".arrow").forEach((arrow) => {
+      arrow.addEventListener("click", (e) => {
+        let position = 0;
+        exerciceArray.map((exo) => {
+          if (exo.pic == e.target.dataset.pic && position !== 0) {
+            [exerciceArray[position], exerciceArray[position - 1]] = [
+              exerciceArray[position - 1],
+              exerciceArray[position],
+            ];
+            page.lobby();
+          } else {
+            position++;
+          }
+        });
+      });
+    });
+  },
+
+  deleItem: function () {
+    document.querySelectorAll(".deleteBtn").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        let newArr = exerciceArray.filter((exo) => {
+          exo.pic != e.target.dataset.pic;
+        });
+      });
+    });
+  },
 };
 
 const page = {
   lobby: function () {
-    let mapArray = exerciceArray.map(
-      (exo) =>
-        `
+    let mapArray = exerciceArray
+      .map(
+        (exo) =>
+          `
         <li>
             <div class="card-header">
                 <input type="number" id=${exo.pic} min="1" max="10" value=${exo.min}>
@@ -38,13 +80,18 @@ const page = {
         </li>
 
     `
-    );
+      )
+      .join("");
 
     utils.pageContent(
       "Paramétrage <i id='reboot' class='fas fa-undo'></i>",
       "<ul>" + mapArray + "</ul>",
       "<button id='start'>Commencer<i class='far fa-play-circle'></i></button>"
     );
+
+    utils.handleEventMinutes();
+    utils.handleEventArrow();
+    utils.deleItem();
   },
 
   routine: function () {
