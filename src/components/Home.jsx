@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import img1 from '../assets/0.png'
 import img2 from '../assets/1.png'
 import img3 from '../assets/2.png'
@@ -12,15 +12,42 @@ import Card from './Card'
 
 const Home = () => {
     const images = [img1, img2, img3, img4, img5, img6, img7, img8, img9]
+    const [currentCard, setCurrentCard] = useState(0)
+    const [isStarted, setIsStarted] = useState(false)
+
+    const handleStart = () => {
+        setIsStarted(true)
+    }
+
+    const handleTimerEnd = () => {
+        setCurrentCard((prev) => prev + 1)
+    }
 
     return (
         <div className="section">
             <h1 className="h1 py-7 text-center">Yoga Timer</h1>
-            <div className="flex flex-1 flex-row flex-wrap justify-between gap-7">
-                {images.map((img) => (
-                    <Card img={img} />
+            <div className="flex flex-1 flex-row flex-wrap justify-center gap-7">
+                {images.map((img, index) => (
+                    <Card
+                        key={index}
+                        img={img}
+                        onEnd={handleTimerEnd}
+                        isActive={isStarted && currentCard === index}
+                    />
                 ))}
             </div>
+            <div className="flex justify-center pt-24 pb-10">
+                <button
+                    className="btn text-4xl px-16 py-5"
+                    onClick={handleStart}
+                    disabled={isStarted}
+                >
+                    C'est parti !
+                </button>
+            </div>
+            {currentCard >= images.length && isStarted && (
+                <h2 className="text-center">C'est fini!</h2>
+            )}
         </div>
     )
 }

@@ -1,32 +1,43 @@
-// import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 
-// const Timer = ({ min, startTimer }) => {
-//   const [minutes, setMinutes] = useState(min);
-//   const [seconds, setSeconds] = useState(0);
+const Timer = ({ initialMinutes, initialSeconds, onEnd }) => {
+    const [minutes, setMinutes] = useState(initialMinutes)
+    const [seconds, setSeconds] = useState(initialSeconds)
 
-//   useEffect(() => {
-//     if (startTimer) {
-//       const interval = setInterval(() => {
-//         if (seconds === 0) {
-//           if (minutes === 0) {
-//             clearInterval(interval);
-//           } else {
-//             setMinutes(minutes - 1);
-//             setSeconds(59);
-//           }
-//         } else {
-//           setSeconds(seconds - 1);
-//         }
-//       }, 1000);
-//       return () => clearInterval(interval);
-//     }
-//   }, [seconds, startTimer]);
+    useEffect(() => {
+        setMinutes(initialMinutes)
+        setSeconds(initialSeconds)
+    }, [initialMinutes, initialSeconds])
 
-//   return (
-//     <div>
-//       {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
-//     </div>
-//   );
-// };
+    useEffect(() => {
+        if (minutes === 0 && seconds === 0) {
+            onEnd()
+            return // Arrête l'exécution si le timer est terminé
+        }
 
-// export default Timer;
+        const intervalId = setInterval(() => {
+            if (seconds === 0) {
+                if (minutes === 0) {
+                    clearInterval(intervalId)
+                } else {
+                    setMinutes((prev) => prev - 1)
+                    setSeconds(59) // Remets les secondes à 59
+                }
+            } else {
+                setSeconds((prev) => prev - 1)
+            }
+        }, 1000)
+
+        return () => clearInterval(intervalId)
+    }, [minutes, seconds, onEnd])
+
+    return (
+        <div>
+            <span>
+                {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+            </span>
+        </div>
+    )
+}
+
+export default Timer
