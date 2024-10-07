@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn {
+    background: #f6edea;
+}
+
+.btn:hover {
+    background: #efe4df;
+}
+
+.btn:active {
+    background: #e7d9d3;
+}
+
+@layer base {
+    body {
+        @apply text-lg leading-8 text-primary;
+    }
+    .h1 {
+        @apply text-5xl font-bold mb-6 tracking-[10%] uppercase;
+    }
+    .h2 {
+        @apply font-semibold text-[26px] mb-6 leading-[46px];
+    }
+
+    .btn {
+        @apply rounded-md  text-primary font-medium;
+    }
+    .section {
+        @apply p-10 max-w-7xl mx-auto;
+    }
+}
