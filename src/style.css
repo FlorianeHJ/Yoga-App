@@ -14,6 +14,18 @@
     background: #e7d9d3;
 }
 
+.card-blur {
+    opacity: 0.5;
+    filter: blur(2px);
+    transition: all 0.5s ease;
+}
+
+.card-active {
+    transform: scale(1.2);
+    z-index: 10;
+    transition: all 0.5s ease;
+}
+
 @layer base {
     body {
         @apply text-lg leading-8 text-primary;
