@@ -1,13 +1,13 @@
 import axios from 'axios'
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom' // Assure-toi d'importer useNavigate
+import { useNavigate } from 'react-router-dom'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
-import { API_ROUTES } from '../utils/constants' // Assure-toi que ce chemin est correct
+import { API_ROUTES } from '../utils/constants'
 
 const Signin = () => {
     const navigate = useNavigate()
-    const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [notification, setNotification] = useState({
@@ -20,7 +20,7 @@ const Signin = () => {
         try {
             setIsLoading(true)
             const response = await axios.post(API_ROUTES.SIGN_UP, {
-                username,
+                email,
                 password,
             })
             if (!response?.data) {
@@ -45,7 +45,7 @@ const Signin = () => {
         try {
             setIsLoading(true)
             const response = await axios.post(API_ROUTES.SIGN_IN, {
-                username,
+                email,
                 password,
             })
             if (!response?.data?.token) {
@@ -55,10 +55,9 @@ const Signin = () => {
                 })
                 console.log('Erreur lors de la connexion: ', response)
             } else {
-                // Stocke le token et les informations de l'utilisateur dans le stockage local ou context
                 localStorage.setItem('token', response.data.token)
                 localStorage.setItem('userId', response.data.userId)
-                navigate('/') // Redirige vers la page d'accueil ou le tableau de bord
+                navigate('/')
             }
         } catch (err) {
             console.log(err)
@@ -74,6 +73,11 @@ const Signin = () => {
             <Header />
             <div className="section">
                 <div>
+                    <h2 className="text-4xl pb-16 text-center">
+                        Connectez-vous ou inscrivez-vous !
+                    </h2>
+                </div>
+                <div>
                     {notification.message && (
                         <div
                             className={`notification ${
@@ -86,15 +90,14 @@ const Signin = () => {
                     <form
                         className="flex flex-col p-8 rounded-lg justify-center items-center gap-8 bg-secondary"
                         onSubmit={(e) => {
-                            e.preventDefault()
-                            signIn() // Ou signUp selon le bouton cliqué
+                            e.preventDefault() // Empêche le comportement par défaut du formulaire
                         }}
                     >
                         <input
-                            type="text"
-                            placeholder="Nom d'utilisateur"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            type="email"
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                         />
                         <input
                             type="password"
