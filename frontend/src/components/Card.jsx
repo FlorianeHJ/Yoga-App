@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { FaRegTrashAlt } from 'react-icons/fa'
 import Timer from './Timer'
 
 const Card = ({ img, onEnd, isActive, isStarted, onDelete }) => {
@@ -21,7 +22,7 @@ const Card = ({ img, onEnd, isActive, isStarted, onDelete }) => {
 
     return (
         <div
-            className={`btn min-h-40 flex flex-col justify-between items-center px-8 py-10 ${
+            className={`bg-[#f6edea] min-h-40 flex flex-col justify-between items-center px-6 py-8 rounded-xl ${
                 isStarted
                     ? isActive
                         ? 'scale-110 card-active'
@@ -37,13 +38,14 @@ const Card = ({ img, onEnd, isActive, isStarted, onDelete }) => {
                 />
             ) : (
                 <>
-                    <div>
+                    <div className="py-2">
                         <input
                             type="number"
                             value={minutes}
                             onChange={handleMinutesChange}
                             className="text-center w-10 bg-transparent"
                             min="0"
+                            max="59"
                         />{' '}
                         <span>min</span>
                         <input
@@ -58,13 +60,15 @@ const Card = ({ img, onEnd, isActive, isStarted, onDelete }) => {
                     </div>
                 </>
             )}
-            <div className="w-40">
+            <div className="w-40 py-2">
                 <img src={img} alt="Exercices" />
             </div>
             <div>
-                {/* Bouton Delete pour supprimer la carte */}
-                <button onClick={onDelete} className="btn btn-delete">
-                    Supprimer
+                <button
+                    onClick={onDelete}
+                    className=" bg-[#efe4df] btn-delete py-3 px-5"
+                >
+                    <FaRegTrashAlt />
                 </button>
             </div>
         </div>
