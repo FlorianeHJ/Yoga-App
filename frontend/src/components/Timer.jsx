@@ -12,7 +12,7 @@ const Timer = ({ initialMinutes, initialSeconds, onEnd }) => {
     useEffect(() => {
         if (minutes === 0 && seconds === 0) {
             onEnd()
-            return // Arrête l'exécution si le timer est terminé
+            return
         }
 
         const intervalId = setInterval(() => {
@@ -21,7 +21,7 @@ const Timer = ({ initialMinutes, initialSeconds, onEnd }) => {
                     clearInterval(intervalId)
                 } else {
                     setMinutes((prev) => prev - 1)
-                    setSeconds(59) // Remets les secondes à 59
+                    setSeconds(59)
                 }
             } else {
                 setSeconds((prev) => prev - 1)

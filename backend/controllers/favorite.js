@@ -6,12 +6,7 @@ const addFavorite = async (req, res) => {
     const userId = req.user.id;
 
     try {
-        const favoriteExists = await Favorite.findOne({ userId, cardId });
-        if (favoriteExists) {
-            return res.status(400).json({ message: 'Favori déjà existant' });
-        }
-
-        const newFavorite = new Favorite({ userId, cardId });
+               const newFavorite = new Favorite({ userId, cardId });
         await newFavorite.save();
 
         res.status(201).json({ message: 'Favori ajouté' });
@@ -37,21 +32,7 @@ const deleteFavorite = async (req, res) => {
     }
 };
 
-// Vérifier si une carte est déjà dans les favoris
-const checkFavorite = async (req, res) => {
-    const { cardId } = req.params;
-    const userId = req.user.id;
-
-    try {
-        const favorite = await Favorite.findOne({ userId, cardId });
-        res.status(200).json({ isFavorite: !!favorite });
-    } catch (error) {
-        res.status(500).json({ message: 'Erreur lors de la vérification du favori' });
-    }
-};
-
 module.exports = {
     addFavorite,
     deleteFavorite,
-    checkFavorite,
 };

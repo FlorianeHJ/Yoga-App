@@ -1,19 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const {
-    addFavorite,
-    deleteFavorite,
-    checkFavorite,
-} = require('../controllers/favorite');
-const authenticateToken = require('../middleware/auth');
 
-// Ajouter une carte aux favoris
-router.post('/', authenticateToken, addFavorite);
+const fav = require('../controllers/favorite');
+const auth = require('../middleware/auth');
 
-// Retirer une carte des favoris
-router.delete('/:cardId', authenticateToken, deleteFavorite);
-
-// Vérifier si une carte est déjà dans les favoris
-router.get('/:cardId', authenticateToken, checkFavorite);
+router.post('/', auth, fav.addFavorite);
+router.delete('/:cardId', auth, fav.deleteFavorite);
 
 module.exports = router;

@@ -20,7 +20,7 @@ const app = express();
 
 app.use(express.json());
 app.use(helmet());
-app.use('/api/favorite', favoriteRoutes);
+
 
 // Utiliser cors pour gérer les en-têtes CORS
 app.use(cors({
@@ -30,5 +30,6 @@ app.use(cors({
 }));
 
 app.use('/api/auth', userRoutes);
+app.use('/api/favorite', favoriteRoutes);
 
 module.exports = app;

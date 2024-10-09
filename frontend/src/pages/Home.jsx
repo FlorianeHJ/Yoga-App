@@ -36,12 +36,9 @@ const Home = () => {
         setCurrentCard((prev) => prev + 1)
     }
 
-    const handleDeleteCard = (index) => {
-        // Supprime la carte à l'index donné du tableau d'images
-        const newImages = images.filter((_, imgIndex) => imgIndex !== index)
+    const handleDeleteCard = (id) => {
+        const newImages = images.filter((card) => card.id !== id)
         setImages(newImages)
-
-        // Mettre à jour la carte active si elle a été supprimée
         if (currentCard >= newImages.length) {
             setCurrentCard(newImages.length - 1)
         }
@@ -49,7 +46,7 @@ const Home = () => {
 
     const handleLogout = () => {
         setIsLoggedIn(false)
-        // Ici tu peux aussi ajouter la déconnexion dans le backend, comme retirer le token
+        localStorage.removeItem('token')
     }
 
     return (
@@ -69,7 +66,7 @@ const Home = () => {
                             img={card.img}
                             cardId={card.id}
                             onEnd={handleTimerEnd}
-                            onDelete={() => handleDeleteCard(card.id)} // Passe la fonction de suppression
+                            onDelete={() => handleDeleteCard(card.id)}
                             isActive={isStarted && currentCard === card.id}
                             isStarted={isStarted}
                         />
