@@ -1,15 +1,15 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { FaHeart, FaRegHeart, FaRegTrashAlt } from 'react-icons/fa'
-import { API_ROUTES } from '../utils/constants'
 import Timer from './Timer'
 
-const Card = ({ img, onEnd, isActive, isStarted, onDelete, cardId }) => {
+const Card = ({ img, onEnd, isActive, isStarted, onDelete, card }) => {
     const [isFavorite, setIsFavorite] = useState(false)
     const [minutes, setMinutes] = useState(1)
     const [seconds, setSeconds] = useState(0)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const token = localStorage.getItem('token')
+    const cardId = card.id
 
     useEffect(() => {
         if (token) {
@@ -25,21 +25,21 @@ const Card = ({ img, onEnd, isActive, isStarted, onDelete, cardId }) => {
 
         try {
             if (!isFavorite) {
-                // Ajouter la carte aux favoris
+                // Ajoute la carte aux favoris
                 await axios.post(
-                    API_ROUTES.FAVORITE_ADD,
-                    { cardId },
+                    'http://localhost:4000/api/favorite',
+                    { cardId: card.id }, // Utilise l'ID statique défini dans Home.jsx
                     {
                         headers: { Authorization: `Bearer ${token}` },
                     }
                 )
-                setIsFavorite(true)
+                setIsFavorite(true) // Met à jour l'état du favori
             } else {
-                // Retirer la carte des favoris
-                await axios.delete(API_ROUTES.FAVORITE_DELETE(cardId), {
+                // Retire la carte des favoris
+                await axios.delete(`/api/favorite/${card.id}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 })
-                setIsFavorite(false)
+                setIsFavorite(false) // Met à jour l'état du favori
             }
         } catch (error) {
             console.error('Erreur lors de la mise à jour des favoris :', error)

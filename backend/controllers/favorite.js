@@ -1,12 +1,12 @@
 const Favorite = require('../models/Favorite');
 
-// Ajouter une carte aux favoris
 const addFavorite = async (req, res) => {
-    const { cardId } = req.body;
-    const userId = req.user.id;
+    const { cardId } = req.body; 
+    const userId = req.user.id; 
 
     try {
-               const newFavorite = new Favorite({ userId, cardId });
+        // Ajoute le favori pour cet utilisateur
+        const newFavorite = new Favorite({ userId, cardId });
         await newFavorite.save();
 
         res.status(201).json({ message: 'Favori ajouté' });
@@ -15,18 +15,14 @@ const addFavorite = async (req, res) => {
     }
 };
 
-// Retirer une carte des favoris
 const deleteFavorite = async (req, res) => {
-    const { cardId } = req.params;
+    const { cardId } = req.params; // On récupère l'ID de la carte depuis l'URL
     const userId = req.user.id;
 
     try {
-        const favorite = await Favorite.findOneAndDelete({ userId, cardId });
-        if (!favorite) {
-            return res.status(404).json({ message: 'Favori non trouvé' });
-        }
-
-        res.status(200).json({ message: 'Favori retiré' });
+        // Retire le favori pour cet utilisateur
+        await Favorite.findOneAndDelete({ userId, cardId });
+        res.status(200).json({ message: 'Favori supprimé' });
     } catch (error) {
         res.status(500).json({ message: 'Erreur lors de la suppression du favori' });
     }

@@ -56,7 +56,7 @@ const Home = () => {
                 <h1 className="h1 py-7 text-center">Yoga Timer</h1>
                 <p className="text-2xl text-center pb-16">
                     Personnalisez votre programme en supprimant les positions
-                    que vous ne souhaitez pas effectuer, ajuster le timer et
+                    que vous ne souhaitez pas effectuer, ajustez le timer et
                     c'est parti ! 🧘🏻‍♀️
                 </p>
                 <div className="flex flex-1 flex-row flex-wrap justify-center gap-7">
@@ -64,7 +64,7 @@ const Home = () => {
                         <Card
                             key={card.id}
                             img={card.img}
-                            cardId={card.id}
+                            card={card}
                             onEnd={handleTimerEnd}
                             onDelete={() => handleDeleteCard(card.id)}
                             isActive={isStarted && currentCard === card.id}
