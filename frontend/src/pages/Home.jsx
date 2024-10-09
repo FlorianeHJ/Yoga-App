@@ -26,6 +26,7 @@ const Home = () => {
     ])
     const [currentCard, setCurrentCard] = useState(0)
     const [isStarted, setIsStarted] = useState(false)
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
 
     const handleStart = () => {
         setIsStarted(true)
@@ -46,9 +47,14 @@ const Home = () => {
         }
     }
 
+    const handleLogout = () => {
+        setIsLoggedIn(false)
+        // Ici tu peux aussi ajouter la déconnexion dans le backend, comme retirer le token
+    }
+
     return (
         <div>
-            <Header />
+            <Header isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
             <div className="section">
                 <h1 className="h1 py-7 text-center">Yoga Timer</h1>
                 <p className="text-2xl text-center pb-16">
