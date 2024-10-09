@@ -6,6 +6,7 @@ const cors = require('cors'); // Importer cors
 require('dotenv').config();
 
 const userRoutes = require('./routes/user');
+const favoriteRoutes = require('./routes/favorite');
 
 mongoose
   .connect(process.env.MONGO_URI, {
@@ -19,6 +20,7 @@ const app = express();
 
 app.use(express.json());
 app.use(helmet());
+app.use('/api/favorite', favoriteRoutes);
 
 // Utiliser cors pour gérer les en-têtes CORS
 app.use(cors({

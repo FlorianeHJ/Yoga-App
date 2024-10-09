@@ -14,15 +14,15 @@ import Header from '../components/Header'
 
 const Home = () => {
     const [images, setImages] = useState([
-        img1,
-        img2,
-        img3,
-        img4,
-        img5,
-        img6,
-        img7,
-        img8,
-        img9,
+        { id: 1, img: img1 },
+        { id: 2, img: img2 },
+        { id: 3, img: img3 },
+        { id: 4, img: img4 },
+        { id: 5, img: img5 },
+        { id: 6, img: img6 },
+        { id: 7, img: img7 },
+        { id: 8, img: img8 },
+        { id: 9, img: img9 },
     ])
     const [currentCard, setCurrentCard] = useState(0)
     const [isStarted, setIsStarted] = useState(false)
@@ -63,13 +63,14 @@ const Home = () => {
                     c'est parti ! 🧘🏻‍♀️
                 </p>
                 <div className="flex flex-1 flex-row flex-wrap justify-center gap-7">
-                    {images.map((img, index) => (
+                    {images.map((card) => (
                         <Card
-                            key={index}
-                            img={img}
+                            key={card.id}
+                            img={card.img}
+                            cardId={card.id}
                             onEnd={handleTimerEnd}
-                            onDelete={() => handleDeleteCard(index)} // Passe la fonction de suppression
-                            isActive={isStarted && currentCard === index}
+                            onDelete={() => handleDeleteCard(card.id)} // Passe la fonction de suppression
+                            isActive={isStarted && currentCard === card.id}
                             isStarted={isStarted}
                         />
                     ))}
