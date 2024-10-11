@@ -15,14 +15,13 @@ const Card = ({
     const [minutes, setMinutes] = useState(1)
     const [seconds, setSeconds] = useState(0)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
-    const [isFavorite, setIsFavorite] = useState(isFavoriteProp) // État local pour gérer le favori
+    const [isFavorite, setIsFavorite] = useState(isFavoriteProp)
     const token = localStorage.getItem('token')
 
     useEffect(() => {
         setIsAuthenticated(!!token)
     }, [token])
 
-    // Synchroniser l'état local `isFavorite` avec la prop
     useEffect(() => {
         setIsFavorite(isFavoriteProp)
     }, [isFavoriteProp])
@@ -70,16 +69,29 @@ const Card = ({
                 />
             ) : (
                 <>
-                    <div>
-                        {isAuthenticated && (
-                            <button onClick={handleFavoriteToggle}>
-                                {isFavorite ? (
-                                    <FaHeart className="text-red-500" />
-                                ) : (
-                                    <FaRegHeart />
-                                )}
+                    <div className="flex w-full justify-between items-center pb-7">
+                        <div>
+                            {isAuthenticated && (
+                                <button onClick={handleFavoriteToggle}>
+                                    {isFavorite ? (
+                                        <FaHeart className="text-red-500" />
+                                    ) : (
+                                        <FaRegHeart />
+                                    )}
+                                </button>
+                            )}
+                        </div>
+                        <div>
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    handleDeleteCard(card.id)
+                                }}
+                                className="btn-delete"
+                            >
+                                <FaRegTrashAlt />
                             </button>
-                        )}
+                        </div>
                     </div>
                     <div className="py-2">
                         <input
@@ -105,17 +117,6 @@ const Card = ({
             )}
             <div className="w-40 py-2">
                 <img src={img} alt="Exercice" />
-            </div>
-            <div>
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation()
-                        handleDeleteCard(card.id)
-                    }}
-                    className="bg-[#efe4df] btn-delete py-3 px-5"
-                >
-                    <FaRegTrashAlt />
-                </button>
             </div>
         </div>
     )

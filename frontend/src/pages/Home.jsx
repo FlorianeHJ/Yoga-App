@@ -26,7 +26,7 @@ const Home = () => {
         { id: 9, img: img9 },
     ])
 
-    const [currentCard, setCurrentCard] = useState(1)
+    const [currentCard, setCurrentCard] = useState(0) // Change initial value to 0 for better handling
     const [isStarted, setIsStarted] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [favoriteIds, setFavoriteIds] = useState([])
@@ -64,17 +64,38 @@ const Home = () => {
 
     const handleStart = () => {
         setIsStarted(true)
+        setCurrentCard(0) // Start from the first card
     }
 
     const handleTimerEnd = () => {
-        setCurrentCard((prev) => (prev + 1 < images.length ? prev + 1 : prev))
+        setCurrentCard((prev) => {
+            const nextCard = prev + 1 // Move to the next card
+            if (nextCard < images.length) {
+                return nextCard // If there is a next card, return it
+            } else {
+                setIsStarted(false) // Stop if it's the last card
+                return prev // Keep current card if it's the last one
+            }
+        })
     }
 
     const handleDeleteCard = (id) => {
-        setImages((prevImages) => prevImages.filter((card) => card.id !== id))
-        if (currentCard >= images.length - 1) {
-            setCurrentCard(images.length - 2)
-        }
+        setImages((prevImages) => {
+            const updatedImages = prevImages.filter((card) => card.id !== id)
+
+            // Adjust currentCard if the deleted card was currently displayed
+            if (currentCard === id - 1) {
+                setCurrentCard((prev) => Math.max(prev - 1, 0)) // Move to previous or stay at 0
+            }
+
+            // If all cards are deleted, reset
+            if (updatedImages.length === 0) {
+                setCurrentCard(0)
+                setIsStarted(false) // Stop the timer
+            }
+
+            return updatedImages
+        })
     }
 
     const handleLogout = () => {
@@ -131,7 +152,7 @@ const Home = () => {
                     c'est parti ! 🧘🏻‍♀️
                 </p>
                 <div className="flex flex-1 flex-row flex-wrap justify-center gap-7">
-                    {images.map((card) => (
+                    {images.map((card, index) => (
                         <Card
                             key={card.id}
                             id={card.id}
@@ -139,32 +160,30 @@ const Home = () => {
                             img={card.img}
                             currentCard={currentCard}
                             handleDeleteCard={handleDeleteCard}
-                            handleTimerEnd={handleTimerEnd}
+                            onEnd={handleTimerEnd}
                             isStarted={isStarted}
                             handleStart={handleStart}
                             isLoggedIn={isLoggedIn}
                             isFavorite={favoriteIds.includes(
                                 card.id.toString()
                             )}
-                            isActive={
-                                isStarted && currentCard === Number(card.id)
-                            }
+                            isActive={isStarted && currentCard === index} // Use index for comparison
                             handleToggleFavorite={handleToggleFavorite}
-                            onToggleFavorite={handleToggleFavorite}
                         />
                     ))}
+                </div>{' '}
+                <div className="flex justify-center pt-24 pb-10">
+                    <button
+                        className="btn text-4xl px-16 py-5"
+                        onClick={handleStart}
+                        disabled={isStarted}
+                    >
+                        C'est parti !
+                    </button>
                 </div>
             </div>
-            <div className="flex justify-center pt-24 pb-10">
-                <button
-                    className="btn text-4xl px-16 py-5"
-                    onClick={handleStart}
-                    disabled={isStarted}
-                >
-                    C'est parti !
-                </button>
-            </div>
-            {currentCard >= images.length && isStarted && (
+
+            {isStarted && images.length > 0 && currentCard >= images.length && (
                 <h2 className="text-center">C'est fini!</h2>
             )}
             <Footer />
