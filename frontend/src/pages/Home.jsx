@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
 import img1 from '../assets/0.png'
 import img2 from '../assets/1.png'
 import img3 from '../assets/2.png'
@@ -24,23 +25,49 @@ const Home = () => {
         { id: 8, img: img8 },
         { id: 9, img: img9 },
     ])
+
     const [currentCard, setCurrentCard] = useState(0)
     const [isStarted, setIsStarted] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [favoriteIds, setFavoriteIds] = useState([])
+
+    useEffect(() => {
+        const token = localStorage.getItem('token')
+        if (token) {
+            setIsLoggedIn(true)
+            fetchFavorites(token)
+        }
+    }, [])
+
+    const fetchFavorites = async (token) => {
+        try {
+            const response = await axios.get(
+                'http://localhost:4000/api/favorite',
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            )
+            setFavoriteIds(response.data.map((favorite) => favorite.cardId))
+        } catch (error) {
+            console.error(
+                'Erreur lors de la récupération des favoris :',
+                error.response?.data?.message || error.message
+            )
+        }
+    }
 
     const handleStart = () => {
         setIsStarted(true)
     }
 
     const handleTimerEnd = () => {
-        setCurrentCard((prev) => prev + 1)
+        setCurrentCard((prev) => (prev + 1 < images.length ? prev + 1 : prev))
     }
 
     const handleDeleteCard = (id) => {
-        const newImages = images.filter((card) => card.id !== id)
-        setImages(newImages)
-        if (currentCard >= newImages.length) {
-            setCurrentCard(newImages.length - 1)
+        setImages((prevImages) => prevImages.filter((card) => card.id !== id))
+        if (currentCard >= images.length - 1) {
+            setCurrentCard(images.length - 2)
         }
     }
 
@@ -49,9 +76,47 @@ const Home = () => {
         localStorage.removeItem('token')
     }
 
+    const handleToggleFavorite = async (cardId, isFavorite) => {
+        const token = localStorage.getItem('token')
+        try {
+            if (isFavorite) {
+                await axios.delete(
+                    `http://localhost:4000/api/favorite/${cardId}`,
+                    {
+                        headers: { Authorization: `Bearer ${token}` },
+                    }
+                )
+            } else {
+                await axios.post(
+                    'http://localhost:4000/api/favorite',
+                    { cardId },
+                    {
+                        headers: { Authorization: `Bearer ${token}` },
+                    }
+                )
+            }
+            setFavoriteIds((prevIds) => {
+                if (isFavorite) {
+                    return prevIds.filter((id) => id !== cardId)
+                } else {
+                    return [...prevIds, cardId]
+                }
+            })
+        } catch (error) {
+            console.error(
+                'Erreur lors de la mise à jour des favoris :',
+                error.response?.data?.message || error.message
+            )
+        }
+    }
+
     return (
         <div>
-            <Header isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+            <Header
+                isLoggedIn={isLoggedIn}
+                setIsLoggedIn={setIsLoggedIn}
+                handleLogout={handleLogout}
+            />
             <div className="section">
                 <h1 className="h1 py-7 text-center">Yoga Timer</h1>
                 <p className="text-2xl text-center pb-16">
@@ -63,27 +128,23 @@ const Home = () => {
                     {images.map((card) => (
                         <Card
                             key={card.id}
-                            img={card.img}
+                            id={card.id}
                             card={card}
-                            onEnd={handleTimerEnd}
-                            onDelete={() => handleDeleteCard(card.id)}
-                            isActive={isStarted && currentCard === card.id}
+                            img={card.img}
+                            currentCard={currentCard}
+                            handleDeleteCard={handleDeleteCard}
+                            handleTimerEnd={handleTimerEnd}
                             isStarted={isStarted}
+                            handleStart={handleStart}
+                            isLoggedIn={isLoggedIn}
+                            isFavorite={favoriteIds.includes(
+                                card.id.toString()
+                            )}
+                            handleToggleFavorite={handleToggleFavorite}
+                            onToggleFavorite={handleToggleFavorite} // IMPORTANT: La fonction handleToggleFavorite est bien passée ici
                         />
                     ))}
                 </div>
-                <div className="flex justify-center pt-24 pb-10">
-                    <button
-                        className="btn text-4xl px-16 py-5"
-                        onClick={handleStart}
-                        disabled={isStarted}
-                    >
-                        C'est parti !
-                    </button>
-                </div>
-                {currentCard >= images.length && isStarted && (
-                    <h2 className="text-center">C'est fini!</h2>
-                )}
             </div>
             <Footer />
         </div>

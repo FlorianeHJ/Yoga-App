@@ -1,20 +1,24 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { FaHeart, FaRegHeart, FaRegTrashAlt } from 'react-icons/fa'
 import Timer from './Timer'
 
-const Card = ({ img, onEnd, isActive, isStarted, onDelete, card }) => {
-    const [isFavorite, setIsFavorite] = useState(false)
+const Card = ({
+    img,
+    onEnd,
+    isActive,
+    isStarted,
+    onDelete,
+    card,
+    isFavorite,
+    onToggleFavorite,
+}) => {
     const [minutes, setMinutes] = useState(1)
     const [seconds, setSeconds] = useState(0)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const token = localStorage.getItem('token')
-    const cardId = card.id
 
     useEffect(() => {
-        if (token) {
-            setIsAuthenticated(true)
-        }
+        setIsAuthenticated(!!token)
     }, [token])
 
     const handleFavoriteToggle = async () => {
@@ -23,27 +27,7 @@ const Card = ({ img, onEnd, isActive, isStarted, onDelete, card }) => {
             return
         }
 
-        try {
-            if (!isFavorite) {
-                // Ajoute la carte aux favoris
-                await axios.post(
-                    'http://localhost:4000/api/favorite',
-                    { cardId: card.id }, // Utilise l'ID statique défini dans Home.jsx
-                    {
-                        headers: { Authorization: `Bearer ${token}` },
-                    }
-                )
-                setIsFavorite(true) // Met à jour l'état du favori
-            } else {
-                // Retire la carte des favoris
-                await axios.delete(`/api/favorite/${card.id}`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                })
-                setIsFavorite(false) // Met à jour l'état du favori
-            }
-        } catch (error) {
-            console.error('Erreur lors de la mise à jour des favoris :', error)
-        }
+        await onToggleFavorite(card.id, isFavorite)
     }
 
     const handleMinutesChange = (e) => {

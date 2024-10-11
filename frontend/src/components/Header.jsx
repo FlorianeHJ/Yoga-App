@@ -2,13 +2,14 @@ import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import logo from '../assets/logo.png'
 
-const Header = () => {
+const Header = ({ setIsLoggedIn }) => {
     const navigate = useNavigate()
     const token = localStorage.getItem('token')
 
     const handleLogout = () => {
         localStorage.removeItem('token')
         localStorage.removeItem('userId')
+        setIsLoggedIn(false)
         navigate('/')
     }
 

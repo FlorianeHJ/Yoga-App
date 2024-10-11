@@ -1,10 +1,26 @@
 const Favorite = require('../models/Favorite');
 
+const getFavorites = async (req, res) => {
+    const userId = req.user.id;
+
+    try {
+        const favorites = await Favorite.find({ userId }).select('cardId');
+        res.status(200).json(favorites);
+    } catch (error) {
+        res.status(500).json({ message: 'Erreur lors de la récupération des favoris.', error });
+    }
+};
+
 const addFavorite = async (req, res) => {
     const { cardId } = req.body; 
     const userId = req.user.id; 
 
     try {
+        // Vérifie si le favori existe déjà
+        const existingFavorite = await Favorite.findOne({ userId, cardId });
+        if (existingFavorite) {
+            return res.status(400).json({ message: 'Cette carte est déjà dans vos favoris.' });
+        }
         // Ajoute le favori pour cet utilisateur
         const newFavorite = new Favorite({ userId, cardId });
         await newFavorite.save();
@@ -31,4 +47,5 @@ const deleteFavorite = async (req, res) => {
 module.exports = {
     addFavorite,
     deleteFavorite,
+    getFavorites
 };
