@@ -26,7 +26,7 @@ const Home = () => {
         { id: 9, img: img9 },
     ])
 
-    const [currentCard, setCurrentCard] = useState(0)
+    const [currentCard, setCurrentCard] = useState(1)
     const [isStarted, setIsStarted] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [favoriteIds, setFavoriteIds] = useState([])
@@ -38,6 +38,12 @@ const Home = () => {
             fetchFavorites(token)
         }
     }, [])
+
+    useEffect(() => {
+        if (!isLoggedIn) {
+            setFavoriteIds([])
+        }
+    }, [isLoggedIn])
 
     const fetchFavorites = async (token) => {
         try {
@@ -140,12 +146,27 @@ const Home = () => {
                             isFavorite={favoriteIds.includes(
                                 card.id.toString()
                             )}
+                            isActive={
+                                isStarted && currentCard === Number(card.id)
+                            }
                             handleToggleFavorite={handleToggleFavorite}
-                            onToggleFavorite={handleToggleFavorite} // IMPORTANT: La fonction handleToggleFavorite est bien passée ici
+                            onToggleFavorite={handleToggleFavorite}
                         />
                     ))}
                 </div>
             </div>
+            <div className="flex justify-center pt-24 pb-10">
+                <button
+                    className="btn text-4xl px-16 py-5"
+                    onClick={handleStart}
+                    disabled={isStarted}
+                >
+                    C'est parti !
+                </button>
+            </div>
+            {currentCard >= images.length && isStarted && (
+                <h2 className="text-center">C'est fini!</h2>
+            )}
             <Footer />
         </div>
     )

@@ -7,19 +7,25 @@ const Card = ({
     onEnd,
     isActive,
     isStarted,
-    onDelete,
+    handleDeleteCard,
     card,
-    isFavorite,
+    isFavorite: isFavoriteProp,
     onToggleFavorite,
 }) => {
     const [minutes, setMinutes] = useState(1)
     const [seconds, setSeconds] = useState(0)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const [isFavorite, setIsFavorite] = useState(isFavoriteProp) // État local pour gérer le favori
     const token = localStorage.getItem('token')
 
     useEffect(() => {
         setIsAuthenticated(!!token)
     }, [token])
+
+    // Synchroniser l'état local `isFavorite` avec la prop
+    useEffect(() => {
+        setIsFavorite(isFavoriteProp)
+    }, [isFavoriteProp])
 
     const handleFavoriteToggle = async () => {
         if (!isAuthenticated) {
@@ -28,6 +34,8 @@ const Card = ({
         }
 
         await onToggleFavorite(card.id, isFavorite)
+
+        setIsFavorite(!isFavorite)
     }
 
     const handleMinutesChange = (e) => {
@@ -100,7 +108,10 @@ const Card = ({
             </div>
             <div>
                 <button
-                    onClick={onDelete}
+                    onClick={(e) => {
+                        e.stopPropagation()
+                        handleDeleteCard(card.id)
+                    }}
                     className="bg-[#efe4df] btn-delete py-3 px-5"
                 >
                     <FaRegTrashAlt />
