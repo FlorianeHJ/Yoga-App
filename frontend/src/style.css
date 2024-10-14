@@ -41,6 +41,6 @@
         @apply rounded-md  text-primary font-medium;
     }
     .section {
-        @apply p-10 max-w-7xl mx-auto;
+        @apply max-w-7xl mx-auto;
     }
 }

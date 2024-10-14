@@ -4,6 +4,7 @@ import Timer from './Timer'
 
 const Card = ({
     img,
+    name,
     onEnd,
     isActive,
     isStarted,
@@ -61,7 +62,7 @@ const Card = ({
                     : ''
             }`}
         >
-            {isActive ? (
+            {isAuthenticated && isActive ? (
                 <Timer
                     initialMinutes={minutes}
                     initialSeconds={seconds}
@@ -93,30 +94,35 @@ const Card = ({
                             </button>
                         )}
                     </div>
-                    <div className="py-2">
-                        <input
-                            type="number"
-                            value={minutes}
-                            onChange={handleMinutesChange}
-                            className="text-center w-10 bg-transparent"
-                            min="0"
-                            max="59"
-                        />{' '}
-                        <span>min</span>
-                        <input
-                            type="number"
-                            value={seconds}
-                            onChange={handleSecondsChange}
-                            className="text-center w-10 bg-transparent"
-                            min="0"
-                            max="59"
-                        />
-                        <span>sec</span>
-                    </div>
+                    {isAuthenticated && (
+                        <div className="py-2">
+                            <input
+                                type="number"
+                                value={minutes}
+                                onChange={handleMinutesChange}
+                                className="text-center w-10 bg-transparent"
+                                min="0"
+                                max="59"
+                            />{' '}
+                            <span>min</span>
+                            <input
+                                type="number"
+                                value={seconds}
+                                onChange={handleSecondsChange}
+                                className="text-center w-10 bg-transparent"
+                                min="0"
+                                max="59"
+                            />
+                            <span>sec</span>
+                        </div>
+                    )}
                 </>
             )}
             <div className="w-40 py-2">
                 <img src={img} alt="Exercice" />
+            </div>
+            <div className="flex justify-center">
+                <span>{name}</span>
             </div>
         </div>
     )

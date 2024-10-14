@@ -3,7 +3,7 @@ import { FaGithub, FaLinkedin, FaMailBulk } from 'react-icons/fa'
 
 const Footer = () => {
     return (
-        <footer>
+        <footer className="pt-14">
             <div className="flex text-center pb-2 px-4">
                 <p className="text-sm italic">
                     Ce site est conçu pour la détente et le bien-être.

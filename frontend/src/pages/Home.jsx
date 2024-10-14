@@ -10,6 +10,7 @@ import img6 from '../assets/6.png'
 import img7 from '../assets/7.png'
 import img8 from '../assets/8.png'
 import img9 from '../assets/9.png'
+import logo from '../assets/logo.png'
 import Card from '../components/Card'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
@@ -17,15 +18,15 @@ import Header from '../components/Header'
 const Home = () => {
     // Stockage initial des cartes
     const initialImages = [
-        { id: 1, img: img1 },
-        { id: 2, img: img2 },
-        { id: 3, img: img3 },
-        { id: 4, img: img4 },
-        { id: 5, img: img5 },
-        { id: 6, img: img6 },
-        { id: 7, img: img7 },
-        { id: 8, img: img8 },
-        { id: 9, img: img9 },
+        { id: 1, img: img1, name: 'Position 1' },
+        { id: 2, img: img2, name: 'Position 2' },
+        { id: 3, img: img3, name: 'Position 3' },
+        { id: 4, img: img4, name: 'Position 4' },
+        { id: 5, img: img5, name: 'Position 5' },
+        { id: 6, img: img6, name: 'Position 6' },
+        { id: 7, img: img7, name: 'Position 7' },
+        { id: 8, img: img8, name: 'Position 8' },
+        { id: 9, img: img9, name: 'Position 9' },
     ]
 
     const [images, setImages] = useState(initialImages)
@@ -159,7 +160,21 @@ const Home = () => {
             <div className="section">
                 <h1 className="h1 py-7 text-center">Yoga Timer</h1>
                 {isFinished ? (
-                    <h2 className="text-center">C'est fini!</h2>
+                    <>
+                        <div className=" pb-12 flex flex-col gap-10 justify-center items-center">
+                            <h2 className="text-center text-3xl">
+                                Bravo, vous avez terminé !
+                            </h2>
+                            <img
+                                className="w-36"
+                                src={logo}
+                                alt="logo du site"
+                            />
+                            <p>
+                                Hydratez vous, reprenez doucement votre rythme !
+                            </p>
+                        </div>
+                    </>
                 ) : (
                     <>
                         {isLoggedIn ? (
@@ -199,28 +214,33 @@ const Home = () => {
                                         isStarted && currentCard === index
                                     }
                                     onToggleFavorite={handleToggleFavorite}
+                                    name={card.name}
                                 />
                             ))}
                         </div>
-                        <div className="flex justify-center pt-24 pb-10">
-                            <button
-                                className="btn text-4xl px-16 py-5"
-                                onClick={handleStart}
-                                disabled={isStarted}
-                            >
-                                C'est parti !
-                            </button>
-                        </div>
+                        {isLoggedIn && (
+                            <div className="flex justify-center pt-24 pb-10">
+                                <button
+                                    className="btn text-4xl px-16 py-5"
+                                    onClick={handleStart}
+                                    disabled={isStarted}
+                                >
+                                    C'est parti !
+                                </button>
+                            </div>
+                        )}
                     </>
                 )}
-                <div className="flex justify-center ">
-                    <button
-                        className="btn p-4 rounded-xl "
-                        onClick={handleReset}
-                    >
-                        <FaRotateLeft />
-                    </button>
-                </div>
+                {isLoggedIn && (
+                    <div className="flex justify-center ">
+                        <button
+                            className="btn p-4 rounded-xl "
+                            onClick={handleReset}
+                        >
+                            <FaRotateLeft />
+                        </button>
+                    </div>
+                )}
             </div>
 
             <Footer />

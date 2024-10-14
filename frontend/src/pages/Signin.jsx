@@ -97,19 +97,21 @@ const Signin = () => {
                         }}
                     >
                         <input
+                            className="py-2 px-4"
                             type="email"
                             placeholder="Email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
                         <input
+                            className="py-2 px-4"
                             type="password"
                             placeholder="Mot de passe"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
                         <button
-                            className="btn p-2"
+                            className="btn py-2 px-4"
                             type="button"
                             onClick={signIn} // Bouton de connexion
                             disabled={isLoading}
@@ -117,7 +119,7 @@ const Signin = () => {
                             {isLoading ? 'Connexion...' : 'Se connecter'}
                         </button>
                         <button
-                            className="btn p-2"
+                            className="btn py-2 px-4"
                             type="button"
                             onClick={signUp} // Bouton d'inscription
                             disabled={isLoading}
