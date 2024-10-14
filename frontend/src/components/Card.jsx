@@ -81,7 +81,7 @@ const Card = ({
                                 </button>
                             )}
                         </div>
-                        <div>
+                        {isAuthenticated && (
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation()
@@ -91,7 +91,7 @@ const Card = ({
                             >
                                 <FaRegTrashAlt />
                             </button>
-                        </div>
+                        )}
                     </div>
                     <div className="py-2">
                         <input

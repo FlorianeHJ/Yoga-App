@@ -43,11 +43,6 @@ const Header = ({ setIsLoggedIn }) => {
                                 Se connecter
                             </span>
                         </Link>
-                        <Link to="/signup">
-                            <span className="cursor-pointer px-3 py-1 hover:bg-[#f6edea] rounded-lg">
-                                Inscription
-                            </span>
-                        </Link>
                     </>
                 )}
             </div>

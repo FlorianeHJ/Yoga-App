@@ -72,10 +72,13 @@ const Signin = () => {
         <div>
             <Header />
             <div className="section">
-                <div>
-                    <h2 className="text-4xl pb-16 text-center">
-                        Connectez-vous ou inscrivez-vous !
+                <div className="flex flex-col justify-center items-center py-10">
+                    <h2 className="text-4xl pb-5 text-center">
+                        Connectez-vous pour démarrer la session 🧘🏻‍♀️
                     </h2>
+                    <p className="text-xl">
+                        Vous n'avez pas encore de compte ? Inscrivez vous !
+                    </p>
                 </div>
                 <div>
                     {notification.message && (

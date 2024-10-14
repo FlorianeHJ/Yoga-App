@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { FaRotateLeft } from 'react-icons/fa6'
 import img1 from '../assets/0.png'
 import img2 from '../assets/1.png'
 import img3 from '../assets/2.png'
@@ -14,7 +15,8 @@ import Footer from '../components/Footer'
 import Header from '../components/Header'
 
 const Home = () => {
-    const [images, setImages] = useState([
+    // Stockage initial des cartes
+    const initialImages = [
         { id: 1, img: img1 },
         { id: 2, img: img2 },
         { id: 3, img: img3 },
@@ -24,12 +26,14 @@ const Home = () => {
         { id: 7, img: img7 },
         { id: 8, img: img8 },
         { id: 9, img: img9 },
-    ])
+    ]
 
-    const [currentCard, setCurrentCard] = useState(0) // Change initial value to 0 for better handling
+    const [images, setImages] = useState(initialImages)
+    const [currentCard, setCurrentCard] = useState(0)
     const [isStarted, setIsStarted] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [favoriteIds, setFavoriteIds] = useState([])
+    const [isFinished, setIsFinished] = useState(false)
 
     useEffect(() => {
         const token = localStorage.getItem('token')
@@ -64,17 +68,19 @@ const Home = () => {
 
     const handleStart = () => {
         setIsStarted(true)
-        setCurrentCard(0) // Start from the first card
+        setCurrentCard(0)
+        setIsFinished(false)
     }
 
     const handleTimerEnd = () => {
         setCurrentCard((prev) => {
-            const nextCard = prev + 1 // Move to the next card
+            const nextCard = prev + 1
             if (nextCard < images.length) {
-                return nextCard // If there is a next card, return it
+                return nextCard
             } else {
-                setIsStarted(false) // Stop if it's the last card
-                return prev // Keep current card if it's the last one
+                setIsStarted(false)
+                setIsFinished(true)
+                return prev
             }
         })
     }
@@ -83,15 +89,13 @@ const Home = () => {
         setImages((prevImages) => {
             const updatedImages = prevImages.filter((card) => card.id !== id)
 
-            // Adjust currentCard if the deleted card was currently displayed
             if (currentCard === id - 1) {
-                setCurrentCard((prev) => Math.max(prev - 1, 0)) // Move to previous or stay at 0
+                setCurrentCard((prev) => Math.max(prev - 1, 0))
             }
 
-            // If all cards are deleted, reset
             if (updatedImages.length === 0) {
                 setCurrentCard(0)
-                setIsStarted(false) // Stop the timer
+                setIsStarted(false)
             }
 
             return updatedImages
@@ -137,6 +141,14 @@ const Home = () => {
         }
     }
 
+    const handleReset = () => {
+        // Réinitialiser les cartes et minuteurs
+        setImages(initialImages) // Remet toutes les cartes
+        setCurrentCard(0) // Remet l'index de la carte à 0
+        setIsStarted(false) // Arrête le timer
+        setIsFinished(false) // Indique que la session n'est pas finie
+    }
+
     return (
         <div>
             <Header
@@ -146,46 +158,71 @@ const Home = () => {
             />
             <div className="section">
                 <h1 className="h1 py-7 text-center">Yoga Timer</h1>
-                <p className="text-2xl text-center pb-16">
-                    Personnalisez votre programme en supprimant les positions
-                    que vous ne souhaitez pas effectuer, ajustez le timer et
-                    c'est parti ! 🧘🏻‍♀️
-                </p>
-                <div className="flex flex-1 flex-row flex-wrap justify-center gap-7">
-                    {images.map((card, index) => (
-                        <Card
-                            key={card.id}
-                            id={card.id}
-                            card={card}
-                            img={card.img}
-                            currentCard={currentCard}
-                            handleDeleteCard={handleDeleteCard}
-                            onEnd={handleTimerEnd}
-                            isStarted={isStarted}
-                            handleStart={handleStart}
-                            isLoggedIn={isLoggedIn}
-                            isFavorite={favoriteIds.includes(
-                                card.id.toString()
-                            )}
-                            isActive={isStarted && currentCard === index} // Use index for comparison
-                            handleToggleFavorite={handleToggleFavorite}
-                        />
-                    ))}
-                </div>{' '}
-                <div className="flex justify-center pt-24 pb-10">
+                {isFinished ? (
+                    <h2 className="text-center">C'est fini!</h2>
+                ) : (
+                    <>
+                        {isLoggedIn ? (
+                            <p className="text-2xl text-center pb-16">
+                                Personnalisez votre routine ! Choisissez vos
+                                positions favorites, supprimez celles qui ne
+                                vous inspirent pas et modifiez le compte à
+                                rebours. Vous êtes prêts ? Alors cliquez sur
+                                "C'est parti", et bonne session ! 🧘🏻‍♀️
+                            </p>
+                        ) : (
+                            <p className="text-2xl text-center pb-16">
+                                Vous avez besoin d'une pause ? Yoga Timer est
+                                parfait pour mettre en place une routine
+                                bien-être. Connectez-vous pour avoir accès au
+                                timer et à la personnalisation de votre routine
+                                ! 🧘🏻‍♀️
+                            </p>
+                        )}
+                        <div className="flex flex-1 flex-row flex-wrap justify-center gap-7">
+                            {images.map((card, index) => (
+                                <Card
+                                    key={card.id}
+                                    id={card.id}
+                                    card={card}
+                                    img={card.img}
+                                    currentCard={currentCard}
+                                    handleDeleteCard={handleDeleteCard}
+                                    onEnd={handleTimerEnd}
+                                    isStarted={isStarted}
+                                    handleStart={handleStart}
+                                    isLoggedIn={isLoggedIn}
+                                    isFavorite={favoriteIds.includes(
+                                        card.id.toString()
+                                    )}
+                                    isActive={
+                                        isStarted && currentCard === index
+                                    }
+                                    onToggleFavorite={handleToggleFavorite}
+                                />
+                            ))}
+                        </div>
+                        <div className="flex justify-center pt-24 pb-10">
+                            <button
+                                className="btn text-4xl px-16 py-5"
+                                onClick={handleStart}
+                                disabled={isStarted}
+                            >
+                                C'est parti !
+                            </button>
+                        </div>
+                    </>
+                )}
+                <div className="flex justify-center ">
                     <button
-                        className="btn text-4xl px-16 py-5"
-                        onClick={handleStart}
-                        disabled={isStarted}
+                        className="btn p-4 rounded-xl "
+                        onClick={handleReset}
                     >
-                        C'est parti !
+                        <FaRotateLeft />
                     </button>
                 </div>
             </div>
 
-            {isStarted && images.length > 0 && currentCard >= images.length && (
-                <h2 className="text-center">C'est fini!</h2>
-            )}
             <Footer />
         </div>
     )
