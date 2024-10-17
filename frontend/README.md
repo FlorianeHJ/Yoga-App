@@ -1,70 +1,54 @@
-# Getting Started with Create React App
+# Yoga Timer - Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description
 
-## Available Scripts
+Le frontend de l'application **Yoga Timer** est une interface utilisateur développée en React et Tailwind CSS. L'application permet de visualiser des positions de yoga avec des timers et d'ajouter des positions aux favoris pour les utilisateurs authentifiés.
 
-In the project directory, you can run:
+## Prérequis
 
-### `npm start`
+-   Node.js (version recommandée : 16.x ou plus)
+-   npm ou yarn
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Installation
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1. Clonez ce dépôt dans votre répertoire local :
 
-### `npm test`
+    ```bash
+    git clone https://github.com/ton-repo/yoga-timer-frontend.git
+    ```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2. Accédez au répertoire du projet :
 
-### `npm run build`
+    ```bash
+    cd yoga-timer-frontend
+    ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. Installez les dépendances :
+    ```bash
+    npm install
+    ```
+    ou
+    ```bash
+    yarn install
+    ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Scripts disponibles
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+-   `npm start` ou `yarn start`: Démarre le projet en mode développement. L'application sera accessible à l'adresse `http://localhost:3000/`.
+-   `npm run build` ou `yarn build`: Construit le projet pour la production dans le dossier `build`.
+-   `npm run test` ou `yarn test`: Lance les tests unitaires si disponibles.
+-   `npm run eject`: Ejecte les configurations de création.
 
-### `npm run eject`
+## Configuration
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+-   **React Router** est utilisé pour la navigation entre les pages comme "Home", "About", "Work", et "Contact".
+-   **Axios** est utilisé pour les requêtes API vers le backend.
+-   **Tailwind CSS** est utilisé pour le style.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Technologies utilisées
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+-   **React**: version 18.x
+-   **React Router DOM**: version 6.x pour la gestion des routes.
+-   **Axios**: pour gérer les appels API.
+-   **Tailwind CSS**: pour les styles et les mises en page.
+-   **React Icons**: pour les icônes.
